@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<feature
+      id="ca.mt.wbspies-feature"
+      label="Workbench Spies Feature"
+      version="1.0.3"
+      provider-name="Manumitting Technologies">
+
+   <description url="http://mt.ca/tools/eclipse/wpspies/">
+      Provides spies on various aspects of the Eclipse Workbench.
+   </description>
+
+   <copyright>
+     This is free and unencumbered software released into the public domain.
+     See http://unlicense.org.
+   </copyright>
+
+   <license>
+     This is free and unencumbered software released into the public domain.
+     See http://unlicense.org.
+   </license>
+
+   <url>
+      <update label="Workbench Spies" url="http://mt.ca/tools/eclipse/wpspies/"/>
+   </url>
+
+   <plugin
+         id="ca.mt.wbspies"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"/>
+
+</feature>

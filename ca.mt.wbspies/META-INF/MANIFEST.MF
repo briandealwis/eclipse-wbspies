@@ -1,0 +1,15 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Workbench Spies Plug-in
+Bundle-SymbolicName: ca.mt.wbspies; singleton:=true
+Bundle-Version: 1.0.3
+Bundle-Activator: ca.mt.wbspies.WorkbenchSpiesPlugin
+Bundle-Vendor: Manumitting Technologies
+Bundle-Localization: plugin
+Require-Bundle: org.eclipse.ui,
+ org.eclipse.core.runtime,
+ org.eclipse.jdt.ui,
+ org.eclipse.jdt.core,
+ org.eclipse.jface.text,
+ org.eclipse.ui.views
+Bundle-RequiredExecutionEnvironment: J2SE-1.5
