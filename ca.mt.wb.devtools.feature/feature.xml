@@ -2,7 +2,7 @@
 <feature
       id="ca.mt.wb.devtools.feature"
       label="Eclipse Workbench Developer Tools"
-      version="0.0.7.qualifier"
+      version="1.0.0.qualifier"
       provider-name="Manumitting Technologies, Inc.">
 
    <description url="http://mt.ca/tools/eclipse/wb">

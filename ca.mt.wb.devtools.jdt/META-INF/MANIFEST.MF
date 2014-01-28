@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: JDT Workbench Tools
 Bundle-SymbolicName: ca.mt.wb.devtools.jdt;singleton:=true
-Bundle-Version: 0.0.7.qualifier
+Bundle-Version: 1.0.0.qualifier
 Bundle-Activator: ca.mt.wb.devtools.jdt.Activator
 Bundle-Vendor: Manumitting Technologies Inc
 Bundle-Localization: plugin
