@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+		
+<!--  Perspective Extensions --> 
+  <extension point="org.eclipse.ui.perspectives">
+    <perspective id="ca.mt.wb.devtools.jdt.strippedJavaBrowsingPerspective"
+      name="Stripped Java Browsing"
+      class="ca.mt.wb.devtools.jdt.StrippedJavaBrowsingPageLayout"
+      icon="icons/browse_persp.gif"/>  <!-- shamelessly copied -->
+  </extension>
+   
+  <extension
+      point="org.eclipse.ui.perspectiveExtensions">
+    <perspectiveExtension
+        targetID="org.eclipse.ui.resourcePerspective">
+      <perspectiveShortcut
+          id="ca.mt.wb.devtools.jdt.strippedJavaBrowsingPerspective">
+      </perspectiveShortcut>
+    </perspectiveExtension>
+    <perspectiveExtension
+        targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+      <perspectiveShortcut
+          id="ca.mt.wb.devtools.jdt.strippedJavaBrowsingPerspective">
+      </perspectiveShortcut>
+    </perspectiveExtension>
+    <perspectiveExtension
+        targetID="org.eclipse.jdt.ui.JavaPerspective">
+       <perspectiveShortcut
+           id="ca.mt.wb.devtools.jdt.strippedJavaBrowsingPerspective">
+       </perspectiveShortcut>
+    </perspectiveExtension>
+    <perspectiveExtension
+        targetID="org.eclipse.debug.ui.DebugPerspective">
+      <perspectiveShortcut
+          id="ca.mt.wb.devtools.jdt.strippedJavaBrowsingPerspective">
+      </perspectiveShortcut>
+    </perspectiveExtension>
+  </extension>
+   
+      <!-- Members view is: org.eclipse.jdt.ui.MembersView -->
+
+
+	<!-- =========================================
+	           The Open Method and Open Field dialogs
+	        ========================================= -->
+	
+	<!-- M1=Ctrl/Command M2=Shift M3=Alt/Option -->
+   	<extension point="org.eclipse.ui.commands">
+		<!-- see org.eclipse.ui/plugin.xml for command category listings -->
+		<command
+        categoryId="org.eclipse.ui.category.navigate"
+        defaultHandler="ca.mt.wb.devtools.jdt.dialogs.OpenMethodHandler"
+        description="Open a method selection dialog"
+        id="ca.mt.wb.devtools.jdt.openMethodDialog"
+        name="Open &amp;Method..."/>
+		<command
+        categoryId="org.eclipse.ui.category.navigate"
+        defaultHandler="ca.mt.wb.devtools.jdt.dialogs.OpenFieldHandler"
+        description="Open a field selection dialog"
+        id="ca.mt.wb.devtools.jdt.openFieldDialog"
+        name="Open &amp;Field..."/>
+    </extension>
+	<extension point = "org.eclipse.ui.menus">
+    <menuContribution
+          allPopups="false"
+          locationURI="menu:navigate?after=open.ext2">
+       <command
+             commandId="ca.mt.wb.devtools.jdt.openFieldDialog"
+             label="Open Field..."
+             mnemonic="F"
+             style="push">
+       </command>
+       <command
+             commandId="ca.mt.wb.devtools.jdt.openMethodDialog"
+             label="Open Method..."
+             mnemonic="M"
+             style="push">
+       </command>
+    </menuContribution>
+    </extension>
+     
+</plugin>

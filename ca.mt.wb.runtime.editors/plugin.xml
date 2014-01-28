@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.ui.category.window"
+            id="ca.mt.wb.editors.openInNewWindow"
+            name="Open active editor in a new window">
+      </command>
+      <command
+            categoryId="org.eclipse.ui.category.textEditor"
+            defaultHandler="ca.mt.wb.runtime.editors.ToggleLineNumbersHandler"
+            id="ca.mt.wb.editors.toggleLineNumbers"
+            name="Toggle Line Numbers in Text Editors">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="ca.mt.wb.runtime.editors.OpenInNewWindowHandler"
+            commandId="ca.mt.wb.editors.openInNewWindow">
+         <enabledWhen>
+            <with
+                  variable="activeEditor">
+               <instanceof
+                     value="org.eclipse.ui.IEditorPart">
+               </instanceof>
+            </with>
+         </enabledWhen>
+      </handler>
+   </extension>
+
+</plugin>

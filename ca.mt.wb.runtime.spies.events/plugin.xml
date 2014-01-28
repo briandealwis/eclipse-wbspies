@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+	<extension point = "org.eclipse.ui.actionSets">
+		<actionSet id="ca.mt.wb.spies.actionSet"
+			label="Experimental Stuff"
+			visible="true">
+			<action
+		         class="ca.mt.wb.runtime.spies.events.EventListeningAction"
+		         id="ca.mt.wb.spies.toggleEventListening"
+		         label="&amp;Dump SWT Events"
+		         menubarPath="window/additions"
+		         state="false"
+		         style="toggle"/>
+			<action
+		         class="ca.mt.wb.runtime.spies.events.CommandListeningAction"
+		         id="ca.mt.wb.spies.toggleCommandListening"
+		         label="&amp;Dump Command Executions"
+		         menubarPath="window/additions"
+		         state="false"
+		         style="toggle"/>
+		</actionSet>
+	</extension>
+
+
+</plugin>

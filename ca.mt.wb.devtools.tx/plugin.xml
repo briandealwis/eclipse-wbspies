@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Written by Brian de Alwis.
+ Released under the <a href="http://unlicense.org">UnLicense</a>
+-->
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension point="org.eclipse.ui.views">
+      <view id="ca.mt.wb.devtools.tx.view"
+            name="Type Explorer"
+            icon="icons/hierarchicalLayout.gif"
+            category="org.eclipse.jdt.ui.java"
+            class="ca.mt.wb.devtools.tx.InheritanceView">
+      </view>
+   </extension>
+   
+   <extension point="org.eclipse.ui.perspectives">
+         <perspective id="ca.mt.wb.devtools.tx.typesPerspective"
+         	name="Types Exploring"
+         	class="ca.mt.wb.devtools.tx.TypesExplorationPerspective"
+			icon="icons/hierarchicalLayout.gif"/>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.jdt.ui.category.source"
+            description="Open selected items in the Type Explorer"
+            id="ca.mt.wb.devtools.tx.command.open"
+            name="Open Type Explorer">
+         <commandParameter
+               id="types"
+               name="Types"
+               optional="true">
+         </commandParameter>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any?after=additions">
+         <command
+               commandId="ca.mt.wb.devtools.tx.command.open"
+               label="Show in Type Explorer..."
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <iterate operator="and">
+                  <instanceof value="org.eclipse.jdt.core.IType"/>
+               </iterate>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.bindings">
+      <key
+            commandId="ca.mt.wb.devtools.tx.command.open"
+            contextId="org.eclipse.jdt.ui.javaEditorScope"
+            schemeId="org.eclipse.ui.defaultAcceleratorConfiguration"
+            sequence="M1+M2+X">
+      </key>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="ca.mt.wb.devtools.tx.OpenTypesExplorerHandler"
+            commandId="ca.mt.wb.devtools.tx.command.open">
+         <enabledWhen>
+            <or>
+               <iterate
+                     ifEmpty="false"
+                     operator="or">
+                  <adapt
+                        type="org.eclipse.jdt.core.IJavaElement">
+                  </adapt>
+               </iterate>
+               <instanceof
+                     value="org.eclipse.jface.text.ITextSelection">
+               </instanceof>
+            </or>
+         </enabledWhen>
+      </handler>
+   </extension>
+	
+</plugin>

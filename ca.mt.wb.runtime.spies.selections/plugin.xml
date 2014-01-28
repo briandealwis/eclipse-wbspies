@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.0"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.views">
+      <category
+            name="Workbench Spies"
+            id="ca.mt.wb.spies">
+      </category>
+      <view
+            name="Selection Spy"
+            icon="icons/selections.png"
+            category="ca.mt.wb.spies"
+            class="ca.mt.wb.runtime.spies.selections.SelectionSpyView"
+            id="ca.mt.wb.spies.views.SelectionSpyView">
+      </view>
+   </extension>
+
+
+</plugin>

@@ -1,4 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <site>
-   <feature id="ca.mt.wbspies-feature" />
+   <feature id="ca.mt.wb.runtime.feature">
+    <category id="rt"/>
+   </feature>
+   <feature id="ca.mt.wb.devtools.feature">
+    <category id="tools"/>
+   </feature>
+   <category-def name="rt" label="Runtime / Debugging Tools"/>
+   <category-def name="tools" label="Workbench Development Tools"/>
 </site>

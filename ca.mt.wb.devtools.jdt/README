@@ -1,0 +1,9 @@
+Stripped Java Browsing Perspective:
+  * Will need to explicitly add actionSets: Window -> Customize Perspective
+     change to Commands tab, and enable:
+        * Annotation Navigation
+        * Breakpoints
+        * Editor Navigation
+        * Editor Presentation
+        * Java *
+        
