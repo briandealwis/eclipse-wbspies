@@ -16,7 +16,7 @@ public class TypesExplorationPerspective implements IPerspectiveFactory {
         // Consider using a standalone view?  Doesn't look quite right: I'd prefer having
         // some way of turning off the global tool bar.
 //         layout.addStandaloneView(InheritanceView.viewID, false, IPageLayout.TOP, 1, layout.getEditorArea());
-        layout.addView(InheritanceView.viewID, IPageLayout.TOP, 1, layout.getEditorArea());
+        layout.addView(InheritanceView.viewID, IPageLayout.TOP, 1f, layout.getEditorArea());
         layout.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY, IPageLayout.LEFT, .2f, InheritanceView.viewID);
         IFolderLayout javadocFolder = layout.createFolder("javadoc", IPageLayout.BOTTOM, 0.5f, InheritanceView.viewID);
         javadocFolder.addView(JavaUI.ID_JAVADOC_VIEW);

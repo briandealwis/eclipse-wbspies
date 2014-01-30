@@ -42,6 +42,8 @@ import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.actions.ActionFactory;
 import org.eclipse.ui.dialogs.SelectionDialog;
+import org.eclipse.ui.part.IShowInTarget;
+import org.eclipse.ui.part.ShowInContext;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.zest.core.viewers.GraphViewer;
 import org.eclipse.zest.core.widgets.ZestStyles;
@@ -53,47 +55,45 @@ import org.eclipse.zest.layouts.algorithms.RadialLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.SpringLayoutAlgorithm;
 import org.eclipse.zest.layouts.algorithms.TreeLayoutAlgorithm;
 
-public class InheritanceView  extends ViewPart {
-	
+public class InheritanceView extends ViewPart implements IShowInTarget {
+
     public static String viewID = "ca.mt.wb.devtools.tx.view";
-    
+
     private GraphViewer viewer;
     private Action doubleClickAction;
-	private Action addNodeAction;
-	private Action deleteNodeAction;
+    private Action addNodeAction;
+    private Action deleteNodeAction;
     private Action clearAction;
 
     private List<IAction> layoutActions;
-	
+
     //private ZESTImages images;
-	
-	/**
-	 * The constructor.
-	 */
-	public InheritanceView() {
+
+    /**
+     * The constructor.
+     */
+    public InheritanceView() {
         //this.images = new ZESTImages();
-	}
-	
-		
-	
-	/**
-	 * This is a callback that will allow us
-	 * to create the viewer and initialize it.
-	 */
-	public void createPartControl(Composite parent) {
-//        ((WorkbenchWindow)getViewSite().getWorkbenchWindow()).setCoolBarVisible(true);
-//        ((ToolBarManager)((WorkbenchPage)getSite().getPage()).getActionBars().getToolBarManager()).
+    }
+
+    /**
+     * This is a callback that will allow us
+     * to create the viewer and initialize it.
+     */
+    public void createPartControl(Composite parent) {
+        //        ((WorkbenchWindow)getViewSite().getWorkbenchWindow()).setCoolBarVisible(true);
+        //        ((ToolBarManager)((WorkbenchPage)getSite().getPage()).getActionBars().getToolBarManager()).
         viewer = new GraphViewer(parent, ZestStyles.NONE); /*, ZestStyles.NODES_HIGHLIGHT_ADJACENT /*| ZESTStyles.MARQUEE_SELECTION */
         viewer.setNodeStyle(ZestStyles.NODES_CACHE_LABEL);
         viewer.setLayoutAlgorithm(new TreeLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING));
-		//viewer.setContentProvider(new GraphContentProvider() );
-		viewer.setContentProvider(new IVTypeProvider(viewer) );
-		viewer.setLabelProvider(new IVLabelProvider(viewer));    // new JavaElementLabelProvider()
-		viewer.setInput(new ComparisonModel());
-		
-		makeActions();
-		contributeToActionBars();
-		hookContextMenu();
+        //viewer.setContentProvider(new GraphContentProvider() );
+        viewer.setContentProvider(new IVTypeProvider(viewer));
+        viewer.setLabelProvider(new IVLabelProvider(viewer)); // new JavaElementLabelProvider()
+        viewer.setInput(new ComparisonModel());
+
+        makeActions();
+        contributeToActionBars();
+        hookContextMenu();
         hookDoubleClickAction();
         configureDropSupport();
         getSite().setSelectionProvider(viewer);
@@ -105,38 +105,38 @@ public class InheritanceView  extends ViewPart {
                         && ((ComparisonModel) viewer.getInput()).contains((IType) selected));
             }
         });
-	}
-	
+    }
+
     private void hookDoubleClickAction() {
         viewer.addDoubleClickListener(new IDoubleClickListener() {
             public void doubleClick(DoubleClickEvent event) {
                 doubleClickAction.run();
             }
-        });        
+        });
     }
 
     private void configureDropSupport() {
         Transfer transfers[] = { TextTransfer.getInstance(), JavaUI.getJavaElementClipboardTransfer(),
                 LocalSelectionTransfer.getTransfer() };
         System.out.println("InheritanceView: Adding drop support");
-//        DND.DROP_DEFAULT
-        viewer.addDropSupport(DND.DROP_COPY | DND.DROP_LINK | DND.DROP_DEFAULT,
-                transfers, new InheritanceViewerDropAdapter(viewer, transfers));  
+        //        DND.DROP_DEFAULT
+        viewer.addDropSupport(DND.DROP_COPY | DND.DROP_LINK | DND.DROP_DEFAULT, transfers, new InheritanceViewerDropAdapter(
+                viewer, transfers));
     }
-    
-	private void hookContextMenu() {
-		MenuManager menuMgr = new MenuManager("#PopupMenu");
-		menuMgr.setRemoveAllWhenShown(true);
-		menuMgr.addMenuListener(new IMenuListener() {
-			public void menuAboutToShow(IMenuManager manager) {
-				fillContextMenu(manager);
-			}
-		});
-		Menu menu = menuMgr.createContextMenu(viewer.getControl());
-		viewer.getControl().setMenu(menu);
-		getSite().registerContextMenu(menuMgr, viewer);
-	}
-	
+
+    private void hookContextMenu() {
+        MenuManager menuMgr = new MenuManager("#PopupMenu");
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
+            public void menuAboutToShow(IMenuManager manager) {
+                fillContextMenu(manager);
+            }
+        });
+        Menu menu = menuMgr.createContextMenu(viewer.getControl());
+        viewer.getControl().setMenu(menu);
+        getSite().registerContextMenu(menuMgr, viewer);
+    }
+
     protected Object getSelectedNode() {
         return ((IStructuredSelection) viewer.getSelection()).getFirstElement();
     }
@@ -144,57 +144,56 @@ public class InheritanceView  extends ViewPart {
     public Viewer getViewer() {
         return viewer;
     }
-    
-	private void contributeToActionBars() {
-		IActionBars bars = getViewSite().getActionBars();
-		fillLocalPullDown(bars.getMenuManager());
-		fillLocalToolBar(bars.getToolBarManager());
-        bars.setGlobalActionHandler(ActionFactory.DELETE.getId(),
-                deleteNodeAction);
+
+    private void contributeToActionBars() {
+        IActionBars bars = getViewSite().getActionBars();
+        fillLocalPullDown(bars.getMenuManager());
+        fillLocalToolBar(bars.getToolBarManager());
+        bars.setGlobalActionHandler(ActionFactory.DELETE.getId(), deleteNodeAction);
         bars.updateActionBars();
-	}
-	
-	private void fillLocalPullDown(IMenuManager manager) {
-//		manager.add(addNodeAction);
-//		//manager.add(deleteNodeAction);
-//		manager.add(new Separator());
-//		manager.add(pauseAction);
-//		manager.add(resumeAction);
-//		manager.add(new Separator());
-//		manager.add(stopAction);
-//		manager.add(restartAction);
-//		manager.add(new Separator());
+    }
+
+    private void fillLocalPullDown(IMenuManager manager) {
+        //		manager.add(addNodeAction);
+        //		//manager.add(deleteNodeAction);
+        //		manager.add(new Separator());
+        //		manager.add(pauseAction);
+        //		manager.add(resumeAction);
+        //		manager.add(new Separator());
+        //		manager.add(stopAction);
+        //		manager.add(restartAction);
+        //		manager.add(new Separator());
         for (IAction action : layoutActions) {
             manager.add(action);
         }
         manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
-	
-	private void fillLocalToolBar(IToolBarManager manager) {
+    }
+
+    private void fillLocalToolBar(IToolBarManager manager) {
         manager.add(addNodeAction);
-		manager.add(deleteNodeAction);
+        manager.add(deleteNodeAction);
         manager.add(clearAction);
         manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
     }
-    
-	private void fillContextMenu(IMenuManager manager) {
-		manager.add(deleteNodeAction);
 
-		// Other plug-ins can contribute there actions here
-		manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
-	}
+    private void fillContextMenu(IMenuManager manager) {
+        manager.add(deleteNodeAction);
 
-	/**
-	 * Passing the focus request to the viewer's control.
-	 */
-	public void setFocus() {
-		viewer.getControl().setFocus();
-	}
-	
-	/**
-	 * Creates the menu and toolbar actions.
-	 */
-	private void makeActions() {
+        // Other plug-ins can contribute there actions here
+        manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+    }
+
+    /**
+     * Passing the focus request to the viewer's control.
+     */
+    public void setFocus() {
+        viewer.getControl().setFocus();
+    }
+
+    /**
+     * Creates the menu and toolbar actions.
+     */
+    private void makeActions() {
 
         addNodeAction = new Action() {
             public void run() {
@@ -204,13 +203,17 @@ public class InheritanceView  extends ViewPart {
                             true);
                     dialog.setTitle("Add type(s)...");
                     dialog.setMessage("Type(s) to add?");
-                    if (dialog.open() == IDialogConstants.CANCEL_ID) { return; }
-                    Object[] types= dialog.getResult();
-                    if (types == null || types.length == 0) { return; }
-                    for(int i = 0; i < types.length; i++) {
-                        addType((IType)types[i]);
+                    if (dialog.open() == IDialogConstants.CANCEL_ID) {
+                        return;
                     }
-                } catch(JavaModelException e) {
+                    Object[] types = dialog.getResult();
+                    if (types == null || types.length == 0) {
+                        return;
+                    }
+                    for (int i = 0; i < types.length; i++) {
+                        addType((IType) types[i]);
+                    }
+                } catch (JavaModelException e) {
                     /* do nothing */
                 }
             }
@@ -220,33 +223,32 @@ public class InheritanceView  extends ViewPart {
         addNodeAction.setToolTipText("Add a new class or interface");
         addNodeAction.setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_OBJ_ADD));
 
-        
-		// create the action that deletes the selected node
-		deleteNodeAction = new Action() {
-			public void run() {
-//                ISelection = viewer.getSelection();
-                
+        // create the action that deletes the selected node
+        deleteNodeAction = new Action() {
+            public void run() {
+                //                ISelection = viewer.getSelection();
+
                 Object selectedNode = getSelectedNode();
-				if (selectedNode != null && selectedNode instanceof IType) {
-                    ComparisonModel model = ((ComparisonModel)viewer.getInput()).copy();
-                    if(model.remove((IType)selectedNode)) {
+                if (selectedNode != null && selectedNode instanceof IType) {
+                    ComparisonModel model = ((ComparisonModel) viewer.getInput()).copy();
+                    if (model.remove((IType) selectedNode)) {
                         viewer.setInput(model);
                         //viewer.refresh();
                     }
-				}
+                }
                 setEnabled(false);
-			}
-		};
+            }
+        };
         deleteNodeAction.setEnabled(false);
-		deleteNodeAction.setText("Delete Node");
-		deleteNodeAction.setToolTipText("Delete the selected node");
+        deleteNodeAction.setText("Delete Node");
+        deleteNodeAction.setToolTipText("Delete the selected node");
         deleteNodeAction.setImageDescriptor(getSharedImages().getImageDescriptor(ISharedImages.IMG_ETOOL_DELETE));
         deleteNodeAction.setDisabledImageDescriptor(getSharedImages().getImageDescriptor(
                 ISharedImages.IMG_ETOOL_DELETE_DISABLED));
 
         clearAction = new Action() {
             public void run() {
-                viewer.setInput(new ComparisonModel ());
+                viewer.setInput(new ComparisonModel());
                 //viewer.refresh();
             }
         };
@@ -260,7 +262,7 @@ public class InheritanceView  extends ViewPart {
                 openInEditor(getSelectedNode());
             }
         };
-        
+
         layoutActions = new ArrayList<IAction>();
         layoutActions.add(createLayoutAction("Spring", new SpringLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING)));
         layoutActions.add(createLayoutAction("Radial", new RadialLayoutAlgorithm(LayoutStyles.NO_LAYOUT_NODE_RESIZING)));
@@ -270,7 +272,7 @@ public class InheritanceView  extends ViewPart {
         layoutActions.add(createLayoutAction("Horizontal Tree", new HorizontalTreeLayoutAlgorithm(
                 LayoutStyles.NO_LAYOUT_NODE_RESIZING)));
 
-	}
+    }
 
     private IAction createLayoutAction(String desc, final LayoutAlgorithm la) {
         Action action = new Action() {
@@ -301,9 +303,9 @@ public class InheritanceView  extends ViewPart {
             /* ignore */
         }
     }
-    
+
     protected void addType(IType type) {
-        ComparisonModel model = ((ComparisonModel)viewer.getInput()).copy();
+        ComparisonModel model = ((ComparisonModel) viewer.getInput()).copy();
         model.add(type);
         viewer.setInput(model);
         //viewer.refresh();
@@ -315,5 +317,20 @@ public class InheritanceView  extends ViewPart {
             model.add(t);
         }
         viewer.setInput(model);
+    }
+
+    @Override
+    public boolean show(ShowInContext context) {
+        Collection<IType> types = OpenTypesExplorerHandler.adapt(context.getSelection(), IType.class);
+        if (!types.isEmpty()) {
+            addTypes(types);
+            return true;
+        }
+        IType t = OpenTypesExplorerHandler.adapt(context.getInput(), IType.class);
+        if (t != null) {
+            addType(t);
+            return true;
+        }
+        return false;
     }
 }

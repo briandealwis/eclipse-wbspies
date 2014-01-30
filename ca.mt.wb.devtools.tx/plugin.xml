@@ -25,9 +25,9 @@
          point="org.eclipse.ui.commands">
       <command
             categoryId="org.eclipse.jdt.ui.category.source"
-            description="Open selected items in the Type Explorer"
+            description="Open selected items in the Type Exploring perspective"
             id="ca.mt.wb.devtools.tx.command.open"
-            name="Open Type Explorer">
+            name="Open Type Exploring">
          <commandParameter
                id="types"
                name="Types"
@@ -36,19 +36,44 @@
       </command>
    </extension>
    <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="ca.mt.wb.devtools.tx.OpenTypesExplorerHandler"
+            commandId="ca.mt.wb.devtools.tx.command.open">
+         <enabledWhen>
+            <or>
+               <iterate
+                     ifEmpty="false"
+                     operator="or">
+                  <instanceof
+                        value="org.eclipse.jdt.core.IType">
+                  </instanceof>
+               </iterate>
+               <and>
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <instanceof
+                           value="org.eclipse.jface.text.ITextSelection">
+                     </instanceof>
+                  </iterate>
+               </and>
+            </or>
+         </enabledWhen>
+      </handler>
+   </extension>
+   <extension
          point="org.eclipse.ui.menus">
       <menuContribution
             allPopups="false"
             locationURI="popup:org.eclipse.ui.popup.any?after=additions">
          <command
                commandId="ca.mt.wb.devtools.tx.command.open"
-               label="Show in Type Explorer..."
+               label="Open in Type Exploring..."
                style="push">
             <visibleWhen
-                  checkEnabled="false">
-               <iterate operator="and">
-                  <instanceof value="org.eclipse.jdt.core.IType"/>
-               </iterate>
+                  checkEnabled="true">
             </visibleWhen>
          </command>
       </menuContribution>
@@ -63,25 +88,31 @@
       </key>
    </extension>
    <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="ca.mt.wb.devtools.tx.OpenTypesExplorerHandler"
-            commandId="ca.mt.wb.devtools.tx.command.open">
-         <enabledWhen>
-            <or>
-               <iterate
-                     ifEmpty="false"
-                     operator="or">
-                  <adapt
-                        type="org.eclipse.jdt.core.IJavaElement">
-                  </adapt>
-               </iterate>
-               <instanceof
-                     value="org.eclipse.jface.text.ITextSelection">
-               </instanceof>
-            </or>
-         </enabledWhen>
-      </handler>
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaPerspective">
+         <showInPart
+               id="ca.mt.wb.devtools.tx.view">
+         </showInPart>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+         <showInPart
+               id="ca.mt.wb.devtools.tx.view">
+         </showInPart>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="org.eclipse.jdt.ui.JavaHierarchyPerspective">
+         <showInPart
+               id="ca.mt.wb.devtools.tx.view">
+         </showInPart>
+      </perspectiveExtension>
+      <perspectiveExtension
+            targetID="ca.mt.wb.devtools.jdt.strippedJavaBrowsingPerspective">
+         <showInPart
+               id="ca.mt.wb.devtools.tx.view">
+         </showInPart>
+      </perspectiveExtension>
    </extension>
 	
 </plugin>
