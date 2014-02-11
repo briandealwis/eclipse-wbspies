@@ -9,19 +9,19 @@
   <packaging>pom</packaging>
 
   <properties>
-    <tycho.version>0.14.0</tycho.version>
+    <tycho.version>0.17.0</tycho.version>
     <tycho.showEclipseLog>true</tycho.showEclipseLog>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
     <maven.compiler.encoding>UTF-8</maven.compiler.encoding> <!-- tycho not yet using p.b.sE -->
   </properties>
 
   <modules>
-    <module>ca.mt.wb.runtime.editors</module>
     <module>ca.mt.wb.runtime.spies.events</module>
     <module>ca.mt.wb.runtime.spies.selections</module>
     <module>ca.mt.wb.runtime.spies.sources</module>
     <module>ca.mt.wb.runtime.feature</module>
 
+    <module>ca.mt.wb.devtools.editors</module>
     <module>ca.mt.wb.devtools.jdt</module>
     <module>ca.mt.wb.devtools.tx</module>
     <module>ca.mt.wb.devtools.feature</module>

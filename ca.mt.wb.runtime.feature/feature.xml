@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="ca.mt.wb.runtime.feature"
-      label="Workbench Runtime Tools"
+      label="Eclipse Workbench Runtime Development Tools"
       version="1.1.0.qualifier"
       provider-name="Manumitting Technologies">
 
    <description url="http://mt.ca/tools/eclipse/wb">
-      Provides spies on various aspects of the Eclipse Workbench.
+      Provides spies on various aspects of the actively running Eclipse Workbench.
+      Intended to be installed in runtime instances.
    </description>
 
    <copyright url="http://unlicense.org">
@@ -32,13 +33,6 @@ For more information, please refer to &lt;http://unlicense.org/&gt;
    <url>
       <update label="Workbench Runtime Tools" url="http://mt.ca/tools/eclipse/wb"/>
    </url>
-
-   <plugin
-         id="ca.mt.wb.runtime.editors"
-         download-size="0"
-         install-size="0"
-         version="0.0.0"
-         unpack="false"/>
 
    <plugin
          id="ca.mt.wb.runtime.spies.events"

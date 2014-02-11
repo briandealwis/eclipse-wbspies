@@ -319,7 +319,6 @@ public class InheritanceView extends ViewPart implements IShowInTarget {
         viewer.setInput(model);
     }
 
-    @Override
     public boolean show(ShowInContext context) {
         Collection<IType> types = OpenTypesExplorerHandler.adapt(context.getSelection(), IType.class);
         if (!types.isEmpty()) {

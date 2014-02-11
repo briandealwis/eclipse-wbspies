@@ -7,7 +7,17 @@
 
    <description url="http://mt.ca/tools/eclipse/wb">
       This feature adds a set of development tools for the Eclipse IDE environment
-to make it more useful.
+to make it more useful for developers.
+
+<ul>
+<li> Stripped Java Browsing: new variant of the Java Browsing perspective
+    that uses standalone views to maximize available real-estate. </li>
+<li> Adds new Naviate &gt; Open Method... and Open Field... dialogs
+    that does for methods and fields what Open Type does for types
+    (not bound by default).</li>
+<li> Allows toggling line numbers on and off (not bound by default).</li>
+<li> Allows opening an editor in a new window (not bound by default).</li>
+</ul>
    </description>
 
    <copyright url="http://unlicense.org">
@@ -38,6 +48,13 @@ For more information, please refer to &lt;http://unlicense.org/&gt;
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.core.runtime"/>
    </requires>
+
+   <plugin
+         id="ca.mt.wb.devtools.editors"
+         download-size="0"
+         install-size="0"
+         version="0.0.0"
+         unpack="false"/>
 
    <plugin
          id="ca.mt.wb.devtools.jdt"
