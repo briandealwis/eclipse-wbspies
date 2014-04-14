@@ -6,7 +6,7 @@
       <command
             categoryId="org.eclipse.ui.category.window"
             id="ca.mt.wb.editors.openInNewWindow"
-            name="Open active editor in a new window">
+            name="Open Active Editor in a New Window">
       </command>
       <command
             categoryId="org.eclipse.ui.category.textEditor"
