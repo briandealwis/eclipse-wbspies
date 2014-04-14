@@ -6,6 +6,6 @@
    <feature id="ca.mt.wb.devtools.feature">
     <category id="tools"/>
    </feature>
-   <category-def name="rt" label="Runtime / Debugging Tools"/>
-   <category-def name="tools" label="Workbench Development Tools"/>
+   <category-def name="rt" label="Eclipse Runtime Debugging Tools"/>
+   <category-def name="tools" label="Eclipse Development Tools"/>
 </site>

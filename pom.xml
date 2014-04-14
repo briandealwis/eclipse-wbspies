@@ -23,6 +23,7 @@
 
     <module>ca.mt.wb.devtools.editors</module>
     <module>ca.mt.wb.devtools.jdt</module>
+    <module>ca.mt.wb.devtools.commands</module>
     <module>ca.mt.wb.devtools.feature</module>
 
     <module>site</module>

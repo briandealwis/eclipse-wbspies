@@ -2,7 +2,7 @@
 <feature
       id="ca.mt.wb.devtools.feature"
       label="Eclipse Workbench Developer Tools"
-      version="1.0.0.qualifier"
+      version="1.1.0.qualifier"
       provider-name="Manumitting Technologies, Inc.">
 
    <description url="http://mt.ca/tools/eclipse/wb">
@@ -64,7 +64,7 @@ For more information, please refer to &lt;http://unlicense.org/&gt;
          unpack="false"/>
 
    <plugin
-         id="ca.mt.wb.devtools.tx"
+         id="ca.mt.wb.devtools.commands"
          download-size="0"
          install-size="0"
          version="0.0.0"

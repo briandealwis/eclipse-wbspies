@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            categoryId="org.eclipse.pde.runtime.spy.commands.category"
+            description="Choose amongst the available handlers for a command"
+            id="ca.mt.wb.dev.opencommand"
+            name="Open Command Handler">
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="ca.mt.wb.devtools.commands.OpenCommandHandler"
+            commandId="ca.mt.wb.dev.opencommand">
+      </handler>
+   </extension>
+
+</plugin>
