@@ -1,9 +1,12 @@
 package ca.mt.wb.runtime.spies.events;
 
 import java.util.HashSet;
+import java.util.LinkedHashSet;
 import java.util.Set;
 
 import org.eclipse.jface.action.IAction;
+import org.eclipse.jface.bindings.keys.KeyStroke;
+import org.eclipse.jface.bindings.keys.SWTKeySupport;
 import org.eclipse.jface.viewers.ArrayContentProvider;
 import org.eclipse.jface.viewers.ILabelProvider;
 import org.eclipse.jface.viewers.LabelProvider;
@@ -121,9 +124,24 @@ public class EventListeningAction extends ActionDelegate implements IWorkbenchWi
 					buf.append("[Swipe]");
 					break;
 				}
+			} else if (event.type == SWT.PreEvent || event.type == SWT.PostEvent) {
+				buf.append(" event=").append(describeSWTEventType(event.detail));
+			} else if(event.type == SWT.ImeComposition) {
+				buf.append("composition=");
+				switch(event.detail) {
+				case SWT.COMPOSITION_CHANGED:
+					buf.append("changed");
+					break;
+				case SWT.COMPOSITION_OFFSET:
+					buf.append("offset");
+					break;
+				case SWT.COMPOSITION_SELECTION:
+					buf.append("selection");
+					break;
+				}
+				buf.append(" start="); buf.append(event.start);
+				buf.append(" end="); buf.append(event.end);
 			}
-			buf.append(" start="); buf.append(event.start);
-			buf.append(" end="); buf.append(event.start);
 			if(event.count != 0) { buf.append(" count="); buf.append(event.count); }
 			if(event.button != 0) { buf.append(" button="); buf.append(event.button); }
 			if(event.data != null) { buf.append(" data="); buf.append(event.data); }
@@ -148,58 +166,48 @@ public class EventListeningAction extends ActionDelegate implements IWorkbenchWi
 	}
 
 	protected void describeKey(StringBuffer buf, Event event) {
-		if ((event.stateMask & SWT.COMMAND) == SWT.COMMAND) {
-			buf.append("Cmd+");
-		}
-		if ((event.stateMask & SWT.CTRL) == SWT.CTRL) {
-			buf.append("Ctrl+");
-		}
-		if ((event.stateMask & SWT.ALT) == SWT.ALT) {
-			buf.append("Alt+");
-		}
-		if ((event.stateMask & SWT.SHIFT) == SWT.SHIFT) {
-			buf.append("Shift+");
-		}
-		switch (event.keyCode) {
-		case SWT.CONTROL:
-			buf.append("CONTROL");
-			break;
-		case SWT.COMMAND:
-			buf.append("COMMAND");
-			break;
-		case SWT.ALT:
-			buf.append("ALT");
-			break;
-		case SWT.SHIFT:
-			buf.append("SHIFT");
-			break;
-		case SWT.BS:
-			buf.append("BS");
-			break;
-		case SWT.ESC:
-			buf.append("ESC");
-			break;
-		case SWT.SPACE:
-			buf.append("SPACE");
-			break;
-		case SWT.ARROW_UP:
-			buf.append("UP");
-			break;
-		case SWT.ARROW_DOWN:
-			buf.append("DOWN");
-			break;
-		case SWT.ARROW_LEFT:
-			buf.append("LEFT");
-			break;
-		case SWT.ARROW_RIGHT:
-			buf.append("RIGHT");
-			break;
-		default:
-			if (Character.isISOControl(event.keyCode)) {
-				buf.append(Integer.toHexString(event.keyCode));
-			} else {
-				buf.append(event.keyCode);
+		// just the modifier put down
+		if ((event.keyCode & ~SWT.MODIFIER_MASK) == 0) {
+			buf.append('[');
+			boolean first = true;
+			for (int modifierKey : new int[] { SWT.MOD1, SWT.MOD2, SWT.MOD3, SWT.MOD4 }) {
+				if ((event.stateMask & modifierKey) != 0) {
+					if (!first) {
+						buf.append('+');
+					}
+					buf.append(KeyStroke.getInstance(KeyStroke.NO_KEY, modifierKey).format());
+					first = false;
+				}
 			}
+			buf.append(']');
+			return;
+		}
+		LinkedHashSet<String> keys = new LinkedHashSet<String>();
+		keys.add(KeyStroke.getInstance((event.stateMask & SWT.MODIFIER_MASK), event.keyCode & ~SWT.MODIFIER_MASK)
+				.format());
+		if ((event.stateMask & SWT.MODIFIER_MASK) != 0) {
+			// k1 should be the same as from KeyStroke.getInstance()
+			keys.add(SWTKeySupport
+					.convertAcceleratorToKeyStroke(SWTKeySupport.convertEventToUnmodifiedAccelerator(event)).format());
+			keys.add(SWTKeySupport
+					.convertAcceleratorToKeyStroke(SWTKeySupport.convertEventToUnshiftedModifiedAccelerator(event))
+					.format());
+			keys.add(SWTKeySupport.convertAcceleratorToKeyStroke(SWTKeySupport.convertEventToModifiedAccelerator(event))
+					.format());
+		}
+		buf.append('[');
+		boolean first = true;
+		for (String k : keys) {
+			if (!first) {
+				buf.append(",");
+			}
+			buf.append(k);
+			first = false;
+		}
+		buf.append("] kc=").append(event.keyCode);
+		buf.append(" ch=").append((int) event.character);
+		if (!Character.isISOControl(event.character)) {
+			buf.append(" '").append(event.character).append("'");
 		}
 	}
 
@@ -224,10 +232,9 @@ public class EventListeningAction extends ActionDelegate implements IWorkbenchWi
 		SWT.Verify, SWT.Activate, SWT.Deactivate, SWT.Help,
 		SWT.DragDetect, SWT.Arm, SWT.Traverse, SWT.MouseHover,
 		SWT.HardKeyDown, SWT.HardKeyUp, SWT.MenuDetect, SWT.SetData,
- SWT.MouseWheel,
-			SWT.MouseHorizontalWheel, SWT.Settings, SWT.ImeComposition,
-			SWT.OrientationChange, SWT.Skin, SWT.OpenDocument, SWT.Gesture,
-			SWT.Touch };
+ SWT.MouseWheel, SWT.MouseHorizontalWheel, SWT.Settings, SWT.ImeComposition,
+			SWT.OrientationChange, SWT.Skin, SWT.OpenDocument, SWT.Touch, SWT.Gesture, SWT.Segments, SWT.PreEvent,
+			SWT.PostEvent, SWT.PreExternalEventDispatch, SWT.PostExternalEventDispatch };
 
 	
 	public static String describeSWTEventType(int type) {
@@ -286,6 +293,16 @@ public class EventListeningAction extends ActionDelegate implements IWorkbenchWi
 			return "Gesture";
 		case SWT.Touch:
 			return "Touch";
+		case SWT.Segments:
+			return "Segments";
+		case SWT.PreEvent:
+			return "PreEvent";
+		case SWT.PostEvent:
+			return "PostEvent";
+		case SWT.PreExternalEventDispatch:
+			return "PreExternalEventDispatch(Wake)";
+		case SWT.PostExternalEventDispatch:
+			return "PostExternalEventDispatch(Sleep)";
 		default: return "<unknown:" + type + ">";
 		}
 	}
