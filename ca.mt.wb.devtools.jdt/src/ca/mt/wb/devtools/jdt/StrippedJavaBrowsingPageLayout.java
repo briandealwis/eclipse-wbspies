@@ -55,6 +55,7 @@ public class StrippedJavaBrowsingPageLayout implements IPerspectiveFactory {
         layout.addActionSet(JavaUI.ID_ACTION_SET);
         layout.addActionSet(JavaUI.ID_ELEMENT_CREATION_ACTION_SET);
         layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
+		layout.addActionSet("org.eclipse.ui.WorkingSetActionSet");
 
         // views - java
         layout.addShowViewShortcut(JavaUI.ID_SOURCE_VIEW);
