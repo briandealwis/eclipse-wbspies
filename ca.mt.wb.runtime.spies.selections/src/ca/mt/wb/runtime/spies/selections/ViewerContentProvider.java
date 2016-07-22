@@ -7,6 +7,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import org.eclipse.jdt.core.IClassFile;
+import org.eclipse.jdt.core.IMember;
+import org.eclipse.jdt.core.IMethod;
+import org.eclipse.jdt.core.IType;
+import org.eclipse.jdt.core.JavaModelException;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
@@ -14,6 +19,16 @@ import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.views.contentoutline.ContentOutline;
 
 public class ViewerContentProvider implements ITreeContentProvider {
+	private static Class<?> iMethodClass;
+
+	static {
+		try {
+			iMethodClass = Class.forName("org.eclipse.jdt.core.IMethod");
+		} catch (ClassNotFoundException e) {
+			iMethodClass = null;
+		}
+	}
+
 	protected Viewer viewer;
 	protected Object root; 
 
@@ -38,10 +53,15 @@ public class ViewerContentProvider implements ITreeContentProvider {
 		ArrayList<Object> results = new ArrayList<Object>();
 		if(inputElement instanceof IStructuredSelection) {
 			Collections.addAll(results, ((IStructuredSelection)inputElement).toArray());
-		}
-		if(inputElement instanceof IWorkbenchPart) {
+		} else if (inputElement instanceof IWorkbenchPart) {
 			results.add("id=" + ((IWorkbenchPart)inputElement).getSite().getId());
 			results.add("plugin=" + ((IWorkbenchPart)inputElement).getSite().getPluginId());
+		} else if (iMethodClass != null && iMethodClass.isInstance(inputElement)) {
+			try {
+				results.add("Signature: " + getSignature((IMethod) inputElement));
+			} catch (JavaModelException e) {
+				// ignore
+			}
 		}
 		if(inputElement instanceof Class) {
 			if(!((Class<?>)inputElement).isInterface()) {
@@ -53,6 +73,45 @@ public class ViewerContentProvider implements ITreeContentProvider {
 		return results.toArray();
 	}
 
+	private class MyClassLoader extends ClassLoader {
+		public MyClassLoader(ClassLoader classLoader) {
+			super(classLoader);
+		}
+
+		public Class<?> loadClass(String className, byte[] bytes) {
+			return this.defineClass(className, bytes, 0, bytes.length);
+		}
+	}
+
+	private String getSignature(IMethod method) throws JavaModelException {
+		StringBuilder sb = new StringBuilder("(");
+		for (String sig : method.getParameterTypes()) {
+			sb.append(sig);
+		}
+		sb.append(')');
+		sb.append(method.getReturnType());
+		return sb.toString();
+	}
+
+	private Class<?> findClass(IMember m) throws ClassNotFoundException, JavaModelException {
+		IType clazz = (IType) m.getAncestor(IMember.TYPE);
+		String className = clazz.getFullyQualifiedName();
+
+		IClassFile cf = m.getClassFile();
+		if (cf != null) {
+			MyClassLoader loader = new MyClassLoader(getClass().getClassLoader());
+			try {
+				return loader.loadClass("test." + className, cf.getBytes());
+			} catch (Throwable e) {
+			}
+		}
+		try {
+			return getClass().forName(className);
+		} catch (ClassNotFoundException e) {
+			// ignore
+		}
+		return null;
+	}
 	private void getImplementingInterfaces(Class<?> clazz, List<Object> results) {
 		getImplementingInterfaces(clazz, results, new HashSet<Class<?>>());
 	}
