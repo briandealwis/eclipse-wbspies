@@ -1,0 +1,22 @@
+Manifest-Version: 1.0
+Bundle-ManifestVersion: 2
+Bundle-Name: Mnemon for remembering multi-monitor workbench layouts
+Bundle-SymbolicName: ca.mt.wb.devtools.mnemon;singleton:=true
+Automatic-Module-Name: ca.mt.wb.devtools.mnemon
+Bundle-Version: 1.0.0.qualifier
+Bundle-Vendor: Manumitting Technologies Inc.
+Bundle-ActivationPolicy: lazy
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
+Import-Package: org.eclipse.e4.core.contexts,
+ org.eclipse.e4.core.di.annotations,
+ org.eclipse.e4.core.services.events,
+ org.eclipse.e4.ui.model.application,
+ org.eclipse.e4.ui.model.application.ui,
+ org.eclipse.e4.ui.model.application.ui.basic,
+ org.eclipse.e4.ui.workbench,
+ org.eclipse.e4.ui.workbench.modeling,
+ org.eclipse.swt,
+ org.eclipse.swt.graphics,
+ org.eclipse.swt.widgets,
+ org.osgi.framework,
+ org.osgi.service.event
