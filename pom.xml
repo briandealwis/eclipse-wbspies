@@ -9,10 +9,9 @@
   <packaging>pom</packaging>
 
   <properties>
-    <tycho.version>0.20.0</tycho.version>
+    <tycho.version>1.1.0</tycho.version>
     <tycho.showEclipseLog>true</tycho.showEclipseLog>
     <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-    <maven.compiler.encoding>UTF-8</maven.compiler.encoding> <!-- tycho not yet using p.b.sE -->
   </properties>
 
   <modules>
@@ -24,6 +23,7 @@
     <module>ca.mt.wb.devtools.editors</module>
     <module>ca.mt.wb.devtools.jdt</module>
     <module>ca.mt.wb.devtools.commands</module>
+    <module>ca.mt.wb.devtools.mnemon</module>
     <module>ca.mt.wb.devtools.feature</module>
 
     <module>site</module>
@@ -42,9 +42,9 @@
 
   <repositories>
     <repository>
-      <id>eclipse-juno</id>
+      <id>eclipse-oxygen</id>
       <layout>p2</layout>
-      <url>http://download.eclipse.org/releases/juno</url>
+      <url>http://download.eclipse.org/releases/oxygen</url>
     </repository>
   </repositories>
 </project>
