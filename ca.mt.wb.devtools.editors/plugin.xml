@@ -29,6 +29,21 @@
             </with>
          </enabledWhen>
       </handler>
+      <handler
+            class="ca.mt.wb.runtime.editors.CloseEditorAndPossiblyWindow"
+            commandId="org.eclipse.ui.file.close">
+         <activeWhen>
+            <and>
+            	   <systemTest
+                  property="osgi.os"
+                  value="macosx">
+               </systemTest>
+               <with variable="activeWorkbenchWindow">
+                 <instanceof value="org.eclipse.ui.IWorkbenchWindow" />
+               </with>
+            </and>
+         </activeWhen>
+      </handler>
    </extension>
 
 </plugin>
